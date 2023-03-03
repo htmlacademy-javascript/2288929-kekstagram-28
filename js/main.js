@@ -3,9 +3,10 @@ const ID_MAX = 25;
 const LIKE_MIN = 15;
 const LIKE_MAX = 200;
 const COMMENT_ID_MIN = 0;
-const COMMENT_ID_MAX = 999999;
+const COMMENT_ID_MAX = 50;
+const PHOTOS_COUNT = 25;
 
-const FOTO_DESCRIPTIONS = [
+const PHOTO_DESCRIPTIONS = [
   'Густой хвойный лес',
   'Белоснежные горы',
   'Бухта с лодками',
@@ -46,13 +47,13 @@ const NAMES = [
   '50CENT',
 ];
 
-function getRandomInteger (min, max) {
+const getRandomInteger = (min, max) => {
   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
   const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
   const result = Math.random() * (upper - lower + 1) + lower;
 
   return Math.floor(result);
-}
+};
 
 const createRandomIdFromRangeGenerator = (min, max) => {
   const previousValues = [];
@@ -73,31 +74,37 @@ const createRandomIdFromRangeGenerator = (min, max) => {
   };
 };
 
-const GetRundomArrayElement = (elements) => {
-  return elements[getRandomInteger(0, elements.length - 1)]
-};
+const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const createPhotoDescription = () => {
-  const generatePhotoId = createRandomIdFromRangeGenerator(ID_MIN, ID_MAX);
-  const generateUrlId = createRandomIdFromRangeGenerator(ID_MIN, ID_MAX);
-  const generateLikeNumbers = getRandomInteger(LIKE_MIN, LIKE_MAX);
+const createComment = () => {
   const generateCommentId = createRandomIdFromRangeGenerator(COMMENT_ID_MIN, COMMENT_ID_MAX);
   const generateAvatarId = getRandomInteger(1, 6);
 
   return {
-    id: generatePhotoId(),
-    url: 'photos/' + generateUrlId() + '.jpg',
-    description: GetRundomArrayElement(FOTO_DESCRIPTIONS),
-    likes: generateLikeNumbers,
     comments: [{
       id: generateCommentId(),
-      avatar: 'img/avatar-' + generateAvatarId + '.svg',
-      message: GetRundomArrayElement(MESSAGES),
-      name: GetRundomArrayElement(NAMES),
+      avatar: `img/avatar-${generateAvatarId}.svg`,
+      message: getRandomArrayElement(MESSAGES),
+      name: getRandomArrayElement(NAMES),
     }]
   };
 };
 
-const photoDescription = Array.from({length: 25}, createPhotoDescription);
+const createCommentSection = () => Array.from({length: getRandomInteger(1, 2)}, createComment);
 
+const comments = createCommentSection();
 
+const createPhotoDescription = () => {
+  const generatePhotoId = createRandomIdFromRangeGenerator(ID_MIN, ID_MAX);
+  const id = generatePhotoId();
+
+  return {
+    id: id,
+    url: `photos/${id}.jpg`,
+    description: getRandomArrayElement(PHOTO_DESCRIPTIONS),
+    likes: getRandomInteger(LIKE_MIN, LIKE_MAX),
+    comments
+  };
+};
+
+const createPhoto = () => Array.from({length: PHOTOS_COUNT}, createPhotoDescription);
