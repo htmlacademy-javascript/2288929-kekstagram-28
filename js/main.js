@@ -81,18 +81,12 @@ const createComment = () => {
   const generateAvatarId = getRandomInteger(1, 6);
 
   return {
-    comments: [{
-      id: generateCommentId(),
-      avatar: `img/avatar-${generateAvatarId}.svg`,
-      message: getRandomArrayElement(MESSAGES),
-      name: getRandomArrayElement(NAMES),
-    }]
+    id: generateCommentId(),
+    avatar: `img/avatar-${generateAvatarId}.svg`,
+    message: getRandomArrayElement(MESSAGES),
+    name: getRandomArrayElement(NAMES),
   };
 };
-
-const createCommentSection = () => Array.from({length: getRandomInteger(1, 2)}, createComment);
-
-const comments = createCommentSection();
 
 const createPhotoDescription = () => {
   const generatePhotoId = createRandomIdFromRangeGenerator(ID_MIN, ID_MAX);
@@ -103,8 +97,15 @@ const createPhotoDescription = () => {
     url: `photos/${id}.jpg`,
     description: getRandomArrayElement(PHOTO_DESCRIPTIONS),
     likes: getRandomInteger(LIKE_MIN, LIKE_MAX),
-    comments
+    comments: Array.from(
+      {length: getRandomInteger(1, 2)},
+      createComment
+    )
   };
 };
 
-const createPhoto = () => Array.from({length: PHOTOS_COUNT}, createPhotoDescription);
+const createPhoto = () =>
+  Array.from({length: PHOTOS_COUNT}, (_, photoIndex) =>
+    createPhotoDescription(photoIndex + 1));
+
+createPhoto();
