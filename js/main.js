@@ -104,8 +104,9 @@ const createPhotoDescription = () => {
   };
 };
 
+
 const createPhoto = () =>
-  Array.from({length: PHOTOS_COUNT}, (_, photoIndex) =>
-    createPhotoDescription(photoIndex + 1));
+  Array.from({length: PHOTOS_COUNT}, () =>
+    createPhotoDescription());
 
 createPhoto();
