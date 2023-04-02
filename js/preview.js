@@ -13,7 +13,7 @@ usersPhotos.forEach(({url, likes, comments}) => {
 
   userPhotoTemplete.querySelector('.picture__img').src = url;
   userPhotoTemplete.querySelector('.picture__likes').textContent = likes;
-  userPhotoTemplete.querySelector('.picture__comments').length.textContent = comments;
+  userPhotoTemplete.querySelector('.picture__comments').textContent = comments.length;
   usersPhotosFragment.appendChild(userPhotoTemplete);
 
 });
