@@ -80,10 +80,10 @@ const createPhotoDescription = () => {
   };
 };
 
-const createPhoto = () =>
+const createPhotos = () =>
   Array.from({length: PHOTOS_COUNT}, () =>
     createPhotoDescription());
 
-createPhoto();
+createPhotos();
 
-export {createPhoto};
+export {createPhotos};
