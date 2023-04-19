@@ -74,7 +74,7 @@ const createPhotoDescription = () => {
     description: getRandomArrayElement(PHOTO_DESCRIPTIONS),
     likes: getRandomInteger(LIKE_MIN, LIKE_MAX),
     comments: Array.from(
-      {length: getRandomInteger(1, 2)},
+      {length: getRandomInteger(1, 5)},
       createComment
     )
   };
