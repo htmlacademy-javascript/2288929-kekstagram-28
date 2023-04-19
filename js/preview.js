@@ -1,4 +1,4 @@
-import {renderBigPicture} from './full.js';
+import {showPreview} from './fullpreview.js';
 const userPhotosList = document.querySelector('.pictures');
 const photoTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
@@ -12,7 +12,7 @@ const renderPreviews = (photos) => {
     userPhotoTemplate.querySelector('.picture__likes').textContent = photo.likes;
     userPhotoTemplate.querySelector('.picture__comments').textContent = photo.comments.length;
     userPhotoTemplate.addEventListener('click', () => {
-      renderBigPicture(photo);
+      showPreview(photo);
     });
     photosFragment.appendChild(userPhotoTemplate);
   });
