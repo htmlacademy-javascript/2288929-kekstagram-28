@@ -23,9 +23,8 @@ function onDocumentKeydown (evt) {
   if (evt.key === 'Escape') {
     evt.preventDefault();
     closePreview();
-    document.removeEventListener('keydown', onDocumentKeydown);
   }
-};
+}
 
 const renderComments = (comments) => {
   const commentFragment = document.createDocumentFragment();
@@ -61,7 +60,6 @@ const showPreview = (photo) => {
 
 closeBigPicture.addEventListener('click', () => {
   closePreview();
-  document.removeEventListener('keydown', onDocumentKeydown);
 });
 
 
