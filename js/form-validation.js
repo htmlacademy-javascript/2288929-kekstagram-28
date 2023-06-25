@@ -1,3 +1,6 @@
+import { resetScale } from './img-effects.js';
+import { resetFilter } from './img-effects.js';
+
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const uploadPhotoInput = document.querySelector('#upload-file');
 const editPhotoForm = document.querySelector('.img-upload__overlay');
@@ -21,6 +24,8 @@ const closeUploadPhoto = () => {
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadPhotoForm.reset();
   pristine.reset();
+  resetScale();
+  resetFilter();
 };
 
 function onDocumentKeydown (evt) {

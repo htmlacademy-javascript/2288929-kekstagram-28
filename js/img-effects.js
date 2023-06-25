@@ -5,8 +5,10 @@ const imgInProcess = document.querySelector('.img-upload__preview img');
 const effectLevel = document.querySelector('.effect-level__value');
 const effectContainer = document.querySelector('.img-upload__effect-level');
 const effectSlider = document.querySelector('.effect-level__slider');
-const allFiltersButton = document.querySelectorAll('.effects__radio');
-const STEP_CHANGE_SCALE_PERCENT = 25;
+const effectButtons = document.querySelectorAll('.effects__radio');
+const SCALE_STEP = 25;
+const MAX_SCALE = 100;
+const MIN_SCALE = 25;
 
 const ALL_FILTERS = {
   none:{
@@ -80,66 +82,67 @@ const filterRules = {
   heat: (value) => `brightness(${value})`,
 };
 
-imgInProcess.style = 'transform: scale(1)';
+const onBiggerButtonClick = () => {
+  let newValue = parseInt(scaleControl.value, 10) + SCALE_STEP;
 
-noUiSlider.create(effectSlider, ALL_FILTERS.none);
-
-const makeImgBigger = () => {
-  const newValue = parseInt(scaleControl.value, 10) + STEP_CHANGE_SCALE_PERCENT;
-
-  if (newValue <= 25) {
-    scaleControl.value = '25%';
-    imgInProcess.style.transform = 'scale(0.25)';
-  } else if (newValue >= 100) {
-    scaleControl.value = '100%';
-    imgInProcess.style.transform = 'scale(1)';
-  } else {
-    scaleControl.value = `${newValue}%`;
-    imgInProcess.style.transform = `scale(${newValue / 100})`;
+  if (newValue >= MAX_SCALE) {
+    newValue = MAX_SCALE;
   }
+  scaleControl.value = `${newValue}%`;
+  imgInProcess.style.transform = `scale(${newValue / 100})`;
 };
 
-const makeImgSmaller = () => {
-  const newValue = parseInt(scaleControl.value, 10) - STEP_CHANGE_SCALE_PERCENT;
+const onSmallerButtonClick = () => {
+  let newValue = parseInt(scaleControl.value, 10) - SCALE_STEP;
 
-  if (newValue <= 25) {
-    scaleControl.value = '25%';
-    imgInProcess.style.transform = 'scale(0.25)';
-  } else if (newValue >= 100) {
-    scaleControl.value = '100%';
-    imgInProcess.style.transform = 'scale(1)';
-  } else {
-    scaleControl.value = `${newValue}%`;
-    imgInProcess.style.transform = `scale(${newValue / 100})`;
-
+  if (newValue <= MIN_SCALE) {
+    newValue = MIN_SCALE;
   }
+  scaleControl.value = `${newValue}%`;
+  imgInProcess.style.transform = `scale(${newValue / 100})`;
 };
 
-smallerButton.addEventListener('click', makeImgSmaller);
+const onEffectButtonChange = (evt) => {
+  imgInProcess.className = '';
 
-biggerButton.addEventListener('click', makeImgBigger);
+  if (evt.target.value === 'none') {
+    effectContainer.classList.add('hidden');
+    imgInProcess.style = '';
 
-
-const updateSliderParametr = () => {
-  for (const filter of allFiltersButton) {
-    effectSlider.noUiSlider.on('update', () => {
-      const sliderValue = effectSlider.noUiSlider.get();
-      effectLevel.value = sliderValue;
-    });
-    filter.addEventListener('change', (evt) => {
-      if (evt.target.value === 'none') {
-        effectContainer.classList.add('hidden');
-        imgInProcess.className = '';
-      } else {
-        effectContainer.classList.remove('hidden');
-        imgInProcess.className = '';
-        imgInProcess.classList.add(`effects__preview--${evt.target.value}`);
-        effectSlider.noUiSlider.updateOptions(ALL_FILTERS[evt.target.value]);
-        const functionfilter = filterRules[evt.target.value](0.5);
-        imgInProcess.style.filter = functionfilter;
-      }
-    });
+    return;
   }
+  effectContainer.classList.remove('hidden');
+  imgInProcess.classList.add(`effects__preview--${evt.target.value}`);
+  effectSlider.noUiSlider.updateOptions(ALL_FILTERS[evt.target.value]);
+  effectSlider.noUiSlider.on('update', () => {
+    const sliderValue = effectSlider.noUiSlider.get();
+    effectLevel.value = sliderValue;
+    imgInProcess.style.filter = filterRules[evt.target.value](sliderValue);
+  });
 };
 
-updateSliderParametr()
+
+const initSlider = () => {
+  noUiSlider.create(effectSlider, ALL_FILTERS.none);
+  effectContainer.classList.add('hidden');
+
+  effectButtons.forEach((effectButton) => {
+    effectButton.addEventListener('change', onEffectButtonChange);
+  });
+};
+
+export const resetScale = () => {
+  scaleControl.value = `${MAX_SCALE}%`;
+  imgInProcess.style.transform = `scale(${MAX_SCALE / 100})`;
+};
+
+export const resetFilter = () => {
+  imgInProcess.style = '';
+};
+
+export const initScaleControl = () => {
+  smallerButton.addEventListener('click', onSmallerButtonClick);
+  biggerButton.addEventListener('click', onBiggerButtonClick);
+};
+
+export { initSlider };
