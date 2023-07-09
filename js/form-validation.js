@@ -1,8 +1,6 @@
-import { resetScale } from './img-effects.js';
-import { resetFilter } from './img-effects.js';
-import {successPostPhoto} from './network.js';
-import { errorPostPhoto } from './network.js';
+import { resetScale, resetFilter } from './img-effects.js';
 import { sendData } from './network.js';
+import {showSuccessMessage, showErrorMessage} from './messages.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const uploadPhotoInput = document.querySelector('#upload-file');
@@ -77,7 +75,7 @@ function validateHashtagDublicateInput () {
   return isHashtagsDuplicate.size === hashtags.length;
 }
 
-const setupFormValidation = (onSuccess) => {
+const setupFormValidation = () => {
   pristine.addValidator(commentField, validateCommentInput, 'Не более 140 символов');
   pristine.addValidator(hashtagsInput, validateHashtagFormatInput, 'Хэш-теги не соответствуют формату');
   pristine.addValidator(hashtagsInput, validateHashtagCountInput, 'Можно использовать не более пяти хэш-тегов');
@@ -89,16 +87,18 @@ const setupFormValidation = (onSuccess) => {
   uploadPhotoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
-    if (isValid) {
-      sendData(new FormData(evt.target))
-        .then(onSuccess)
-        .then(successPostPhoto())
-        .catch(() => {
-          errorPostPhoto();
-        });
+
+    if (!isValid) {
+      return;
     }
+
+    sendData(new FormData(evt.target))
+      .then(() => {
+        closeUploadPhoto();
+        showSuccessMessage();
+      })
+      .catch(showErrorMessage);
   });
 };
 
 export {setupFormValidation};
-export {closeUploadPhoto};
