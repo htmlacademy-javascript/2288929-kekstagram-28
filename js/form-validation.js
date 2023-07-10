@@ -1,5 +1,6 @@
-import { resetScale } from './img-effects.js';
-import { resetFilter } from './img-effects.js';
+import { resetScale, resetFilter } from './img-effects.js';
+import { sendData } from './network.js';
+import {showSuccessMessage, showErrorMessage} from './messages.js';
 
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const uploadPhotoInput = document.querySelector('#upload-file');
@@ -29,9 +30,11 @@ const closeUploadPhoto = () => {
 };
 
 function onDocumentKeydown (evt) {
-  if (evt.key === 'Escape'
+  if (
+    evt.key === 'Escape'
   && !(document.activeElement === hashtagsInput)
-  && !(document.activeElement === commentField)) {
+  && !(document.activeElement === commentField)
+  && !document.body.classList.contains('has-error')) {
     evt.preventDefault();
     closeUploadPhoto();
   }
@@ -85,7 +88,18 @@ const setupFormValidation = () => {
 
   uploadPhotoForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    pristine.validate();
+    const isValid = pristine.validate();
+
+    if (!isValid) {
+      return;
+    }
+
+    sendData(new FormData(evt.target))
+      .then(() => {
+        closeUploadPhoto();
+        showSuccessMessage();
+      })
+      .catch(showErrorMessage);
   });
 };
 

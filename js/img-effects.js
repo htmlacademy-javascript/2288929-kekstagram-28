@@ -138,6 +138,7 @@ export const resetScale = () => {
 
 export const resetFilter = () => {
   imgInProcess.style = '';
+  imgInProcess.className = '';
 };
 
 export const initScaleControl = () => {
@@ -145,4 +146,4 @@ export const initScaleControl = () => {
   biggerButton.addEventListener('click', onBiggerButtonClick);
 };
 
-export { initSlider };
+export {initSlider};

@@ -9,8 +9,6 @@ const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const bigPictureLikesCount = bigPicture.querySelector('.likes-count');
 const bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
 const bigPictureSacialCaption = bigPicture.querySelector('.social__caption');
-const imgInProcess = document.querySelector('.img-upload__preview img');
-
 
 const closePreview = () => {
   bigPicture.classList.add('hidden');
@@ -56,7 +54,6 @@ const showPreview = (photo) => {
   commentsCounter.classList.add('hidden');
   commentsLoader.classList.add('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
-  imgInProcess.classList.add('hidden');
   renderBigPicture(photo);
 };
 
@@ -66,3 +63,4 @@ closeBigPicture.addEventListener('click', () => {
 
 
 export {showPreview};
+export {closePreview};
