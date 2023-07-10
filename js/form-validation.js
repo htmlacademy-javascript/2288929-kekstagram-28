@@ -30,9 +30,11 @@ const closeUploadPhoto = () => {
 };
 
 function onDocumentKeydown (evt) {
-  if (evt.key === 'Escape'
+  if (
+    evt.key === 'Escape'
   && !(document.activeElement === hashtagsInput)
-  && !(document.activeElement === commentField)) {
+  && !(document.activeElement === commentField)
+  && !document.body.classList.contains('has-error')) {
     evt.preventDefault();
     closeUploadPhoto();
   }
